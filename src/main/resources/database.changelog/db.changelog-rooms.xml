@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-rooms-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="rooms"/>
+            </not>
+        </preConditions>
+        <createTable tableName="rooms">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="floor_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="room_number" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+            baseTableName="rooms"
+            baseColumnNames="floor_id"
+            constraintName="fk_rooms_floor"
+            referencedTableName="floors"
+            referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add-rental-option-to-rooms" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="rooms"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="rooms">
+            <column name="rental_option_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint
+            baseTableName="rooms"
+            baseColumnNames="rental_option_id"
+            constraintName="fk_rooms_rental_option"
+            referencedTableName="rental_options"
+            referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="remove-rental-option-from-rooms" author="system">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="rooms" columnName="rental_option_id"/>
+                <foreignKeyConstraintExists foreignKeyName="fk_rooms_rental_option"/>
+            </and>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="rooms" constraintName="fk_rooms_rental_option"/>
+        <dropColumn tableName="rooms" columnName="rental_option_id"/>
+    </changeSet>
+
+    <changeSet id="drop-rental-option-id-from-rooms" author="bhargava">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="rooms" columnName="rental_option_id"/>
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="fk_rooms_rental_option"/>
+                </not>
+            </and>
+        </preConditions>
+        <dropColumn tableName="rooms" columnName="rental_option_id"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-bed-occupancy-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="bed_occupancy"/>
+            </not>
+        </preConditions>
+        <createTable tableName="bed_occupancy">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="bed_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tenant_info_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="joining_date" type="DATE"/>
+            <column name="exit_date" type="DATE"/>
+            <column name="notes" type="VARCHAR(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+            baseTableName="bed_occupancy"
+            baseColumnNames="bed_id"
+            constraintName="fk_bed_occupancy_bed"
+            referencedTableName="beds"
+            referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+            baseTableName="bed_occupancy"
+            baseColumnNames="tenant_info_id"
+            constraintName="fk_bed_occupancy_tenant_info"
+            referencedTableName="tenant_info"
+            referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add-rental-sharing-type-to-bed-occupancy" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="bed_occupancy" columnName="rental_type"/>
+            </not>
+            <not>
+                <columnExists tableName="bed_occupancy" columnName="sharing_type"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="bed_occupancy">
+            <column name="rental_type" type="VARCHAR(50)"/>
+            <column name="sharing_type" type="VARCHAR(50)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20251105-add-createdat-updatedat-bed-occupancy" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="bed_occupancy" columnName="created_at"/>
+            </not>
+            <not>
+                <columnExists tableName="bed_occupancy" columnName="updated_at"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="bed_occupancy">
+            <column name="created_at" type="timestamp(6)" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp(6)" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

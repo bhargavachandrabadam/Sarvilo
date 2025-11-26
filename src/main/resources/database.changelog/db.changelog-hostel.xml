@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- Liquibase changelog for HostelEntity -->
+    <changeSet id="create-hostels-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="hostels"/>
+            </not>
+        </preConditions>
+        <createTable tableName="hostels">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="pg_name" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="owner_name" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="mobile_number" type="VARCHAR(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="pg_manager_name" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="pg_manager_contact_number" type="VARCHAR(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="pg_manager_additional_contact_number" type="VARCHAR(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="state" type="VARCHAR(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="city" type="VARCHAR(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="locality" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="pincode" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="description" type="VARCHAR(500)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
+

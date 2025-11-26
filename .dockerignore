@@ -1,0 +1,22 @@
+# Ignore everything by default
+**/*
+
+# But allow the built jar in target/
+!target/*.jar
+
+# Ignore IDE and build artifacts
+.git
+.gitignore
+.vscode
+.idea
+*.iml
+
+# Ignore local build output
+target/**
+!target/*.jar
+
+# Node / others
+node_modules
+npm-debug.log
+.DS_Store
+

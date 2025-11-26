@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-tokens-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tokens"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tokens">
+            <column name="token_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="refresh_token" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="expiry_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="20251022-01-add-owner-id-to-tokens" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="tokens"/>
+                <not>
+                    <columnExists tableName="tokens" columnName="owner_id"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="tokens">
+            <column name="owner_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20251022-02-update-user-id-nullable" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="tokens"/>
+                <columnExists tableName="tokens" columnName="user_id"/>
+            </and>
+        </preConditions>
+        <modifyDataType tableName="tokens" columnName="user_id" newDataType="BIGINT"/>
+        <dropNotNullConstraint tableName="tokens" columnName="user_id" columnDataType="BIGINT"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="2025-09-15-create-usersEntity-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(255)"/>
+            <column name="phone_number" type="VARCHAR(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="role" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN"/>
+            <column name="email_id" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+            </column>
+            <column name="in_app_payment_opt_in" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2025-10-14-add-profile-picture-field" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="users"/>
+            <and>
+            <not>
+                <columnExists tableName="users" columnName="profile_picture"/>
+            </not>
+            </and>
+        </preConditions>
+    </changeSet>
+
+</databaseChangeLog>

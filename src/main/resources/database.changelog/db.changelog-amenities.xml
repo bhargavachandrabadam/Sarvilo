@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-amenities-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="amenities"/>
+            </not>
+        </preConditions>
+        <createTable tableName="amenities">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add-pg-id-to-amenities" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="amenities" columnName="pg_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="amenities">
+            <column name="pg_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="amenities"
+                                 baseColumnNames="pg_id"
+                                 constraintName="fk_amenities_pg"
+                                 referencedTableName="pg_details"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="drop-amenities-name-unique-constraint" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <indexExists tableName="amenities" indexName="amenities_name_key"/>
+        </preConditions>
+        <dropUniqueConstraint
+            constraintName="amenities_name_key"
+            tableName="amenities"/>
+    </changeSet>
+    <changeSet id="add-amenities-name-pg-unique-constraint" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="amenities" indexName="amenities_name_pg_id_key"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint
+            tableName="amenities"
+            columnNames="name,pg_id"
+            constraintName="amenities_name_pg_id_key"/>
+    </changeSet>
+</databaseChangeLog>

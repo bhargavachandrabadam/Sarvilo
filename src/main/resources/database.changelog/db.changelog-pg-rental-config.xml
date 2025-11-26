@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-pg-rental-config-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="pg_rental_config"/>
+            </not>
+        </preConditions>
+        <createTable tableName="pg_rental_config">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="pg_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rental_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sharing_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rent_amount" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="caution_deposit" type="INT"/>
+            <column name="is_active" type="BOOLEAN"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="pg_rental_config"
+                                 baseColumnNames="pg_id"
+                                 constraintName="fk_pg_rental_config_pg"
+                                 referencedTableName="pg_details"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
+

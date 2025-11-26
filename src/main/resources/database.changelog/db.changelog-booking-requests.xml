@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20251029-01-create-booking-requests" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="booking_requests"/>
+            </not>
+        </preConditions>
+        <createTable tableName="booking_requests">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tenant_name" type="VARCHAR(255)"/>
+            <column name="tenant_contact_number" type="VARCHAR(50)"/>
+            <column name="email_id" type="VARCHAR(255)"/>
+            <column name="rental_type" type="VARCHAR(50)"/>
+            <column name="date_of_joining" type="DATE"/>
+            <column name="id_proof_type" type="VARCHAR(100)"/>
+            <column name="proof_photo" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(20)"/>
+            <column name="pg_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="booking_requests"
+                                 baseColumnNames="pg_id"
+                                 constraintName="fk_booking_requests_pg"
+                                 referencedTableName="pg_details"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="booking_requests"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_booking_requests_user"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <!-- 20251030-01: Remove proof_photo column from booking_requests -->
+    <changeSet id="20251030-01-remove-proof-photo-from-booking-requests" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="booking_requests" columnName="proof_photo"/>
+        </preConditions>
+        <dropColumn tableName="booking_requests" columnName="proof_photo"/>
+    </changeSet>
+    <changeSet id="20251030-02-add-tenant-photo-url-to-booking-requests" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="booking_requests" columnName="tenant_photo_url"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="booking_requests">
+            <column name="tenant_photo_url" type="VARCHAR(1024)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20251103-01-add-sharing-type-to-booking-requests" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="booking_requests" columnName="sharing_type"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="booking_requests">
+            <column name="sharing_type" type="VARCHAR(20)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

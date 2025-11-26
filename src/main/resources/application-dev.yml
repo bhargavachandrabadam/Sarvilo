@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    url: ${DEV_DB_URL:jdbc:postgresql://localhost:5432/stazydb}
+    username: ${DEV_DB_USER:postgres}
+    password: ${DEV_DB_PASS:employeedb}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    enabled: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB
+      max-request-size: 500MB
+server:
+  port: 9093
+  servlet:
+    context-path: /mystazyapp/api
+app:
+  uploads-dir: ${DEV_APP_UPLOADS_DIR:D:/campusHRMS/uploads/}
+  open-api:
+    domain-endpoints: ${DEV_OPEN_API_DOMAIN:http://localhost:9093/mystazyapp/api}
+  security:
+    jwt:
+      secret: ${DEV_JWT_SECRET:b1f7dfdfe34dfmvksdasdfbcd3a8c9e6f2b4a5c8d9e7f3a6b1c7d2f8e9a4b6c3d7f1a9e2c6f5d3b8a7}
+      expiration-ms: ${DEV_JWT_EXPIRATION_MS:90000000}
+      refresh-token-expiration-days: ${DEV_JWT_REFRESH_TOKEN_EXPIRATION_DAYS:7}
+    allowed-origins:
+      - ${DEV_ALLOWED_ORIGIN_1:http://localhost:3090}
+      - ${DEV_ALLOWED_ORIGIN_2:http://localhost:4200}
+otp:
+  expiration:
+    minutes: ${DEV_OTP_EXPIRATION_MINUTES:5}
+pg:
+  photos:
+    upload-dir: ${DEV_PG_PHOTOS_UPLOAD_DIR:D:/campusHRMS/uploads/pg-photos/}
+    url-base: http://localhost:9092${server.servlet.context-path}/photos/
+tenant:
+  photos:
+    profile-dir: ${DEV_TENANT_PROFILE_PHOTO_DIR:D:/campusHRMS/uploads/tenant-profile-photos/}
+    id-proof-dir: ${DEV_TENANT_ID_PROOF_PHOTO_DIR:D:/campusHRMS/uploads/tenant-id-proof-photos/}
+  files:
+    file-dir: ${DEV_TENANT_FILE_DIR:D:/campusHRMS/uploads/audit-files/}
+booking:
+  photos:
+    id-proof-dir: ${DEV_BOOKING_ID_PROOF_PHOTO_DIR:D:/campusHRMS/uploads/booking-request-photos/booking-request-id-proof-photos}
+    profile-dir: ${DEV_BOOKING_PROFILE_PHOTO_DIR:D:/campusHRMS/uploads/booking-request-photos/booking-request-profile-photos}
+firebase:
+  config:
+    path: ${DEV_FIREBASE_SERVICE_ACCOUNT_FILE:D:/campusHRMS/stayzy-service-account.json}

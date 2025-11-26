@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-pg-details-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="pg_details"/>
+            </not>
+        </preConditions>
+        <createTable tableName="pg_details">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="mobile_number" type="VARCHAR(20)"/>
+            <column name="pg_name" type="VARCHAR(255)"/>
+            <column name="rental_type" type="VARCHAR(50)"/>
+            <column name="date" type="TIMESTAMP"/>
+            <column name="owner_name" type="VARCHAR(255)"/>
+            <column name="owner_contact_number" type="VARCHAR(20)"/>
+            <column name="is_owner_manager" type="BOOLEAN"/>
+            <column name="manager_name" type="VARCHAR(255)"/>
+            <column name="manager_contact_number" type="VARCHAR(20)"/>
+            <column name="additional_contact_number" type="VARCHAR(20)"/>
+            <column name="state" type="VARCHAR(100)"/>
+            <column name="district" type="VARCHAR(100)"/>
+            <column name="pin_code" type="VARCHAR(20)"/>
+            <column name="gender_choice" type="VARCHAR(20)"/>
+            <column name="description" type="VARCHAR(1000)"/>
+            <column name="daily_rental_active" type="BOOLEAN"/>
+            <column name="monthly_rental_active" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="drop-rental-type-column" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="pg_details"/>
+                <columnExists tableName="pg_details" columnName="rental_type"/>
+            </and>
+        </preConditions>
+        <dropColumn tableName="pg_details" columnName="rental_type"/>
+    </changeSet>
+    <changeSet id="add-location-to-pg-details" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="pg_details"/>
+                <not>
+                    <columnExists tableName="pg_details" columnName="location"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="pg_details">
+            <column name="location" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20251014-03-drop-owner-columns" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="pg_details" columnName="owner_name"/>
+                <columnExists tableName="pg_details" columnName="owner_contact_number"/>
+            </and>
+        </preConditions>
+        <dropColumn tableName="pg_details" columnName="owner_name"/>
+        <dropColumn tableName="pg_details" columnName="owner_contact_number"/>
+    </changeSet>
+    <changeSet id="add-base-entity-audit-columns-to-pg-details" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="pg_details" columnName="created_at"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="pg_details">
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

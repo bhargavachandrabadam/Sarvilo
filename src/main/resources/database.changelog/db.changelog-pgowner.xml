@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20251014-01-create-pg-owners" author="copilot">
+        <createTable tableName="pg_owners">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="owner_name" type="VARCHAR(255)"/>
+            <column name="owner_contact_number" type="VARCHAR(50)"/>
+            <column name="owner_email_address" type="VARCHAR(255)"/>
+            <column name="profile_picture_url" type="VARCHAR(512)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20251014-02-add-owner-id-to-pg-details" author="copilot">
+        <addColumn tableName="pg_details">
+            <column name="owner_id" type="BIGINT"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="pg_details"
+                                 baseColumnNames="owner_id"
+                                 referencedTableName="pg_owners"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_pg_owner"/>
+    </changeSet>
+
+    <changeSet id="20251014-03-add-password-hash-and-is-active-to-pg-owners" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="pg_owners" columnName="password_hash"/>
+            </not>
+            <not>
+                <columnExists tableName="pg_owners" columnName="is_active"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="pg_owners">
+            <column name="password_hash" type="VARCHAR(255)"/>
+            <column name="is_active" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+
+<!--    <changeSet id="20251016-01-add-financial-fields-to-pg-owners" author="copilot">-->
+<!--        <addColumn tableName="pg_owners">-->
+<!--            <column name="upi_address" type="VARCHAR(255)"/>-->
+<!--            <column name="gstin" type="VARCHAR(50)"/>-->
+<!--            <column name="bank_account_number" type="VARCHAR(50)"/>-->
+<!--            <column name="account_holder_name" type="VARCHAR(255)"/>-->
+<!--            <column name="ifsc" type="VARCHAR(20)"/>-->
+<!--        </addColumn>-->
+<!--    </changeSet>-->
+</databaseChangeLog>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20251013-tenant-proof-photos-table" author="bhargavachandrabadam">
+        <createTable tableName="tenant_proof_photos">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tenant_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="proof_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="proof_photo_url" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="tenant_proof_photos"
+                                baseColumnNames="tenant_id"
+                                referencedTableName="tenant_info"
+                                referencedColumnNames="id"
+                                constraintName="fk_tenant_proof_photos_tenant_id"/>
+    </changeSet>
+
+    <changeSet id="20251013-remove-proof-fields-from-tenant-info" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tenant_info" columnName="proof_type"/>
+        </preConditions>
+        <dropColumn tableName="tenant_info" columnName="proof_type"/>
+    </changeSet>
+    <changeSet id="20251013-remove-proof-photo-url-from-tenant-info" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="tenant_info" columnName="proof_photo_url"/>
+        </preConditions>
+        <dropColumn tableName="tenant_info" columnName="proof_photo_url"/>
+    </changeSet>
+
+</databaseChangeLog>
+

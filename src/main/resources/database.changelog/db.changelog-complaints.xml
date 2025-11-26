@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-complaints-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="complaints"/>
+            </not>
+        </preConditions>
+        <createTable tableName="complaints">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="reference_number" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="tenant_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pg_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="floor_id" type="BIGINT"/>
+            <column name="room_id" type="BIGINT"/>
+            <column name="bed_id" type="BIGINT"/>
+            <column name="description" type="VARCHAR(1000)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="DATE"/>
+            <column name="resolved_at" type="DATE"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="complaints"
+                                 baseColumnNames="tenant_id"
+                                 constraintName="fk_complaints_tenant"
+                                 referencedTableName="tenant_info"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="complaints"
+                                 baseColumnNames="pg_id"
+                                 constraintName="fk_complaints_pg"
+                                 referencedTableName="pg_details"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="complaints"
+                                 baseColumnNames="floor_id"
+                                 constraintName="fk_complaints_floor"
+                                 referencedTableName="floors"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="complaints"
+                                 baseColumnNames="room_id"
+                                 constraintName="fk_complaints_room"
+                                 referencedTableName="rooms"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="complaints"
+                                 baseColumnNames="bed_id"
+                                 constraintName="fk_complaints_bed"
+                                 referencedTableName="beds"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

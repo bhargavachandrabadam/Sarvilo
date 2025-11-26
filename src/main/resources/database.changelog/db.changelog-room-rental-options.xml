@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-room-rental-options-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="room_rental_options"/>
+            </not>
+        </preConditions>
+        <createTable tableName="room_rental_options">
+            <column name="room_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rental_option_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="room_rental_options" columnNames="room_id, rental_option_id" constraintName="pk_room_rental_options"/>
+        <addForeignKeyConstraint baseTableName="room_rental_options" baseColumnNames="room_id" constraintName="fk_room_rental_options_room" referencedTableName="rooms" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="room_rental_options" baseColumnNames="rental_option_id" constraintName="fk_room_rental_options_rental_option" referencedTableName="rental_options" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
+

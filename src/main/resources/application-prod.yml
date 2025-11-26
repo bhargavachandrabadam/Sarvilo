@@ -1,0 +1,46 @@
+spring:
+  datasource:
+    url: ${PROD_DB_URL}
+    username: ${PROD_DB_USER}
+    password: ${PROD_DB_PASS}
+  jpa:
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    enabled: true
+server:
+  port: 9092
+  servlet:
+    context-path: /mystazyapp/api
+  multipart:
+    max-file-size: 50MB
+    max-request-size: 50MB
+app:
+  open-api:
+    domain-endpoints: ${PROD_OPEN_API_DOMAIN}
+  security:
+    jwt:
+      secret: ${PROD_JWT_SECRET}
+      expiration-ms: ${PROD_JWT_EXPIRATION_MS}
+      refresh-token-expiration-days: ${PROD_JWT_REFRESH_TOKEN_EXPIRATION_DAYS}
+    allowed-origins:
+        -${PROD_ALLOWED_ORIGIN_1}
+        -${PROD_ALLOWED_ORIGIN_2}
+otp:
+    expiration:
+        minutes: ${PROD_OTP_EXPIRATION_MINUTES}
+pg:
+  photos:
+    upload-dir: ${PROD_PG_PHOTOS_UPLOAD_DIR}
+    url-base: http://yourdomain.com${server.servlet.context-path}/photos/
+tenant:
+    photos:
+        profile-dir: ${PROD_TENANT_PROFILE_PHOTO_DIR}
+        id-proof-dir: ${PROD_TENANT_ID_PROOF_PHOTO_DIR}
+booking:
+  photos:
+    id-proof-dir:${PROD_TENANT_ID_PROOF_PHOTO_DIR}
+    profile-dir:${PROD_TENANT_PROFILE_PHOTO_DIR}
+firebase:
+    config:
+      path: ${PROD_FIREBASE_SERVICE_ACCOUNT_FILE}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+        <include file="database.changelog/db.changelog-users.xml"/>
+        <include file="database.changelog/db.changelog-pg.xml"/>
+        <include file="database.changelog/db.changelog-pgowner.xml"/>
+        <include file="database.changelog/db.changelog-otps.xml"/>
+        <include file="database.changelog/db.changelog-hostel.xml"/>
+        <include file="database.changelog/db.changelog-token.xml"/>
+        <include file="database.changelog/db.changelog-floors.xml"/>
+        <include file="database.changelog/db.changelog-rooms.xml"/>
+        <include file="database.changelog/db.changelog-beds.xml"/>
+        <include file="database.changelog/db.changelog-tenant-info.xml"/>
+        <include file="database.changelog/db.changelog-bed-occupancy.xml"/>
+        <include file="database.changelog/db.changelog-pg-rental-config.xml"/>
+        <include file="database.changelog/db.changelog-amenities.xml"/>
+        <include file="database.changelog/db.changelog-rules.xml"/>
+        <include file="database.changelog/db.changelog-complaints.xml"/>
+        <include file="database.changelog/db.changelog-review.xml"/>
+        <include file="database.changelog/db.changelog-pg-payment-details.xml"/>
+        <include file="database.changelog/db.changelog-pgphotopaths.xml"/>
+        <include file="database.changelog/db.changelog-audit-entities.xml"/>
+        <include file="database.changelog/db.changelog-tenant-proof-photos.xml"/>
+        <include file="database.changelog/db.changelog-favorites.xml"/>
+        <include file="database.changelog/db.changelog-booking-requests.xml"/>
+        <include file="database.changelog/db.changelog-booking-request-proof-photos.xml"/>
+        <include file="database.changelog/db.changelog-tenant-payments.xml"/>
+</databaseChangeLog>

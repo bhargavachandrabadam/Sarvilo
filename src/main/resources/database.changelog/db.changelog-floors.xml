@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-floors-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="floors"/>
+            </not>
+        </preConditions>
+        <createTable tableName="floors">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="pg_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="floor_number" type="VARCHAR(255)"/>
+            <column name="type" type="VARCHAR(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+            baseTableName="floors"
+            baseColumnNames="pg_id"
+            constraintName="fk_floors_pg"
+            referencedTableName="pg_details"
+            referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

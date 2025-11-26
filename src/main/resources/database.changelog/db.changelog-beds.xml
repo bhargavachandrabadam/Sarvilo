@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-beds-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="beds"/>
+            </not>
+        </preConditions>
+        <createTable tableName="beds">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="room_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bed_number" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="monthly_rent" type="DECIMAL(19,2)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+            baseTableName="beds"
+            baseColumnNames="room_id"
+            constraintName="fk_beds_room"
+            referencedTableName="rooms"
+            referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="add-notes-to-beds-20251107" author="bhargavachandrabadam">
+        <preConditions>
+            <not>
+                <columnExists tableName="beds" columnName="notes"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="beds">
+            <column name="notes" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="add-isDeleted-to-beds-20251120" author="bhargavachandrabadam">
+        <preConditions>
+            <not>
+                <columnExists tableName="beds" columnName="is_deleted"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="beds">
+            <column name="is_deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20251121-add-bed-created-at" author="bhargavachandrabadam">
+        <preConditions>
+            <not>
+                <columnExists tableName="beds" columnName="created_at"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="beds">
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20251121-add-bed-updated-at" author="bhargavachandrabadam">
+        <preConditions>
+            <not>
+                <columnExists tableName="beds" columnName="updated_at"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="beds">
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

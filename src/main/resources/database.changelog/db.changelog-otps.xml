@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="2025-09-15-create-otps-table" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+            <tableExists tableName="otps"/>
+            </not>
+        </preConditions>
+        <createTable tableName="otps">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="otp" type="VARCHAR(4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expires_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="true" unique="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="otps"
+                                baseColumnNames="user_id"
+                                referencedTableName="users"
+                                referencedColumnNames="id"
+                                constraintName="fk_otps_user_id"/>
+    </changeSet>
+    <changeSet id="20251014-03-add-pg-owner-id-to-otps" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="otps"/>
+                <not>
+                    <columnExists tableName="otps" columnName="pg_owner_id"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="otps">
+            <column name="pg_owner_id" type="BIGINT"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="otps"
+                                 baseColumnNames="pg_owner_id"
+                                 referencedTableName="pg_owners"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_otps_pg_owner"/>
+    </changeSet>
+    <changeSet id="20251014-04-make-user-id-nullable" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="otps" columnName="user_id"/>
+        </preConditions>
+        <dropNotNullConstraint tableName="otps" columnName="user_id" columnDataType="BIGINT"/>
+    </changeSet>
+</databaseChangeLog>

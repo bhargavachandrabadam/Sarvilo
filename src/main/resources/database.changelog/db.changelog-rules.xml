@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="create-rules-table" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="rules"/>
+            </not>
+        </preConditions>
+        <createTable tableName="rules">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add-pg-id-to-rules" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="rules" columnName="pg_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="rules">
+            <column name="pg_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="rules"
+                                 baseColumnNames="pg_id"
+                                 constraintName="fk_rules_pg"
+                                 referencedTableName="pg_details"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="add-rules-name-pg-unique-constraint" author="bhargavachandrabadam">
+            <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM information_schema.table_constraints WHERE constraint_name = 'rules_name_pg_id_key' AND table_name = 'rules';
+            </sqlCheck>
+        </preConditions>
+        <addUniqueConstraint
+            tableName="rules"
+            columnNames="name,pg_id"
+            constraintName="rules_name_pg_id_key"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20251111-01-create-fcm-device-token" author="bhargavachandrabadam">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="fcm_device_token"/>
+            </not>
+        </preConditions>
+        <createTable tableName="fcm_device_token">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="identity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="identity_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fcm_token" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="device_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_updated" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Add composite index for fast lookup -->
+        <createIndex indexName="idx_fcm_device_token_identity_id_type" tableName="fcm_device_token">
+            <column name="identity_id"/>
+            <column name="identity_type"/>
+        </createIndex>
+
+        <!-- Optionally, add unique constraint if you want one token per identity per device -->
+        <!--
+        <addUniqueConstraint
+            tableName="fcm_device_token"
+            columnNames="identity_id,identity_type,device_type"
+            constraintName="uk_identity_device"/>
+        -->
+    </changeSet>
+
+</databaseChangeLog>
