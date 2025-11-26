@@ -3,18 +3,23 @@
 # when running `docker build`.
 
 # Builder stage: compile the Spring Boot jar
-# Use a specific Maven image tag that is available on Docker Hub. If your environment
-# still cannot pull this image, either update the tag to a known available one or
-# use the alternate commented-out approach to install Maven on an OpenJDK image.
-FROM maven:3.9.4-eclipse-temurin-17-slim AS builder
+# Use a stable Eclipse Temurin JDK image and install Maven inside the builder stage.
+# This avoids relying on specific `maven:` tags that may not be available in all
+# registries while still keeping a multi-stage build.
+FROM eclipse-temurin:17-jdk-jammy AS builder
 WORKDIR /workspace
+
+# Install Maven (from distro) and other utilities needed for building
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends maven ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy just the files needed to fetch dependencies (speeds up rebuilds)
 COPY pom.xml mvnw ./
 # Copy maven wrapper directory if present (keeps layer cacheable)
 COPY .mvn .mvn
 
-# Download dependencies
+# Download dependencies (may succeed using installed maven)
 RUN mvn -B -Dmaven.repo.local=/root/.m2 -DskipTests dependency:go-offline || true
 
 # Copy the rest of the project and build the jar

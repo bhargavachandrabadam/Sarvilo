@@ -1,22 +1,27 @@
-# Ignore everything by default
-**/*
+# Updated .dockerignore — keep the build context small but allow files needed to build inside Docker
 
-# But allow the built jar in target/
+# Exclude compiled outputs; allow the built jar artefact if present
+target/
 !target/*.jar
 
-# Ignore IDE and build artifacts
+# Git / IDE files
 .git
 .gitignore
 .vscode
 .idea
 *.iml
 
-# Ignore local build output
-target/**
-!target/*.jar
-
-# Node / others
+# Node / other local artifacts
 node_modules
 npm-debug.log
 .DS_Store
 
+# Allow essential build and Docker files
+!pom.xml
+!mvnw
+!mvnw.cmd
+!.mvn/
+!src/
+!Dockerfile
+!.dockerignore
+!README.md
