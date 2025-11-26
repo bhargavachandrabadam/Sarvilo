@@ -3,7 +3,10 @@
 # when running `docker build`.
 
 # Builder stage: compile the Spring Boot jar
-FROM maven:3.9-jdk-17-slim AS builder
+# Use a specific Maven image tag that is available on Docker Hub. If your environment
+# still cannot pull this image, either update the tag to a known available one or
+# use the alternate commented-out approach to install Maven on an OpenJDK image.
+FROM maven:3.9.4-eclipse-temurin-17-slim AS builder
 WORKDIR /workspace
 
 # Copy just the files needed to fetch dependencies (speeds up rebuilds)
